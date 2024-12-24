@@ -1,4 +1,4 @@
---------------------------- Minitalk and foundation of Process-management  ---------------------------
+--------------------- Minitalk and foundation of Process-management  ------------------------
 
 What is Inter-Process-Communication(ipc) ?
 
@@ -83,11 +83,11 @@ What is the diff between pipe and socket ?
     on different physical machine.
 
 what is a signalemptyset ?
-
-    type of signal set to an empty state ,ensuring that no signal are included in the set
-    int sigemptyset(sigset_t *set);
-    it clean all signal from set and making it set to empty
-
+    
+    it initialise a signal set given by the set to empty, and it return 1 if the signum is number
+    of set , 0 if the signal signum not a member of set and -1 in the case of the error
+    so it creat a signal that cheack it work an clean and in a empty state for preventing udefined
+    behavor or a garbege value 
 What is Kill() ?
 
     used to send any signal to any process group or process.
@@ -110,12 +110,14 @@ What is sigaction ?
     in additional th sigactio can be define as this structer below :
 
         struct sigaction {
-            void (*sa_handler)(int);
-            void (*sa_sigaction)(int, siginfo_t *, void);
-            sigset_t sa mask;
-            int sa_flags;
-            void (*sa_restorer)(void);
+            void (*sa_handler)(int); // TRADITIONAL HANDLER FOR SIGNALS
+            void (*sa_sigaction)(int, siginfo_t *, void); // HANDLER WITH ADDITIONAL INFO (sa_info)
+            sigset_t sa mask; // SET THE SIGNAL TO BE BLOCK DURING THE HANDLER
+            int sa_flags; // FLAGS TO MODIFY FOR HANDLING THE BEHAVOR
+            void (*sa_restorer)(void); // USED FOR THE OLD IMPLEMENTATIONS, TYPCALLY UNUSED
         };
+    so it allow you to specify detailed behavoir for a signal compared to the older signal() 
+    and give you more context about the signal 
 
 what is sigaddset ?
 
