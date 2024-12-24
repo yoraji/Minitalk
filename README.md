@@ -13,8 +13,17 @@ What is Inter-Process-Communication(ipc) ?
 What is a Signals ?
 
     Signal is a from of Inter Process Comuniction exist to notify a process that a specific event
-    has occurred so in simple term a signal is an asynchronous , so it can interorupt a process 
-    at any point, forcing it to pause the current activity and hndle the signal.
+    has occurred so in simple term a signal is an asynchronous , so it interrupt a process 
+    at any point, forcing it to pause the current activity and handle the signal.
+    each signal has unique number that differentiates it from the other signals and an associated
+    a default action that determines the behavoir when the process receive that signal
+        SIGHUP : terminal line hangup
+        SIGINT : interrupt program (ctrl + c)
+        SIGQUIT: quit program (ctrl + d)
+        SIGKILL: kill the program
+        SIGBUS : buss error
+        SIGSTOP: it stop the program
+        SIGCONT: it continue after stoping
 
 what is a process-Group ? 
 
@@ -40,6 +49,7 @@ What is Daemon Process?
     they handle tasks like system maintenace, network service or hardwar management
 
 What is a zombie Process ?
+
     a process that terminated they execution but still has an entry to his process table becouse
     his parent it not yet read it exit status, and he consuming the minimum resources(cpu, memory)
 
@@ -68,12 +78,28 @@ What is Pipes ?
 
 What is the diff between pipe and socket ?
 
+    the other important differentce is that we can use pipes to connect processes on the same 
+    physical machine .but in the other hand we ,use socket to establish connection between processes
+    on different physical machine.
 
 what is a signalemptyset ?
 
     type of signal set to an empty state ,ensuring that no signal are included in the set
     int sigemptyset(sigset_t *set);
     it clean all signal from set and making it set to empty
+
+What is Kill() ?
+
+    used to send any signal to any process group or process.
+        . if pid is positive then signal sig is sent to pid
+        . if pid is equal to 0, then sig is sent to every process in the process group of
+            the !! current !! process
+        . if pid is equal to -1 the signal is send to every process which the calling process has the
+            permission to send signals, except for the init process
+        . if pid is less than -1 then it send to every process in the group process
+        . if the signal is 0 mean that no sig is sent, but the error cheack is performed .
+            it can be use to cheak whether the calling process has the permission to signal
+            a specific process.
 
 what is sigaddset ?
 
