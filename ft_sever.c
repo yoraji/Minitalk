@@ -1,5 +1,17 @@
 #include "ft_minitalk.h"
 
+void	display_banner(int pid)
+{
+	ft_printf("\n\t%s███╗   ███╗██╗███╗   ██╗██╗████████╗ █████╗ ██╗     ██╗██╗%s\n", YELLOW, END);
+	ft_printf("\t%s██╔████╔██║██║██╔██╗ ██║██║   ██║   ███████║██║     █████╔╝%s\n", YELLOW, END);
+	ft_printf("\t%s██║╚██╔╝██║██║██║╚██╗██║██║   ██║   ██╔══██║██║     ██╔═██╗%s\n", YELLOW, END);
+	ft_printf("\t%s██║ ╚═╝ ██║██║██║ ╚████║██║   ██║   ██║  ██║███████╗██║  ██╗%s\n", YELLOW, END);
+	ft_printf("\t%s╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝   ╚═╝   ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝%s\n", YELLOW, END);
+	ft_printf("%s\n\t\tPID: %d%s\t\t\t%sBy: youssef raji%s\n", RED, pid, END, YELLOW, END);
+	ft_printf("\t⊱ ────────────────────── {.⋅ ✯ ⋅.} ─────────────────────── ⊰\n\n");
+}
+
+
 int main()
 {
 	int	pid;

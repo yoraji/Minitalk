@@ -4,7 +4,8 @@
 
 #include <signal.h>
 #include <unistd.h>
-#include <ft_printf/ft_printf.h>
+
+#include <printf/ft_printf.h>
 
 # define RED "\033[0;31m"
 # define GREEN "\033[0;32m"
