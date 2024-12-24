@@ -15,25 +15,76 @@ What is a Signals ?
     Signal is a from of Inter Process Comuniction exist to notify a process that a specific event
     has occurred so in simple term a signal is an asynchronous , so it can interorupt a process 
     at any point, forcing it to pause the current activity and hndle the signal.
-what is aprocess-Group ? 
 
-well a process-group is a collection of processes that can be manged in signal entity, and one thing more important about the process group is that the first process or (lower PID number)
-and his caracterise by number or an index called PGID,
-`:
+what is a process-Group ? 
+
+    well a process-group is a collection of processes that can be manged in signal entity, and one
+    thing more important about the process group is that the first process or (lower PID number)
+    and his caracterise by number or an index called PGID,
+    
+Why we need a process group ?
+
+    for orginise and manage multiple processes and it help for distrubution of signals to multiple
+    processes at once . example the kill/ctrl+c/ctrl+z command it send to a signal to all processes
+    in the group so it useful for controlling processes. in the shell we also use group to manage 
+    the job example the pipline (comand-1 | command-2) and so on and so on ...
+
+What is orphan-process ?
+
+    is a child-process that remain running evan after it parent process terminated or completed
+    and that orphan-will controlled by init-process
+
+What is Daemon Process?
+
+    every process run in the backgound of couputer and it terminate only when the systeme is shutdown
+    they handle tasks like system maintenace, network service or hardwar management
+
+What is a zombie Process ?
+    a process that terminated they execution but still has an entry to his process table becouse
+    his parent it not yet read it exit status, and he consuming the minimum resources(cpu, memory)
+
+what is a page table (process control block) ?
+
+    it a table that conatine entry for each process and it store inforamation about the process
+        . Process ID (PID) an unique identifier to each process
+        . Parent Process ID (PPID) : is a process id of the process parent
+        . process Group ID (PGID)
+    and also contain the status of each process Sleepling ,Waiting ,Zombie etc..
+    and the most important the cpu state such as register, program counter and stack pointer
+    and inforamtion about memory management (page-table),file descriptors 
+    and Miscellaneous all information about directory enviroment variable
+    yes and it so important becouse it help for process management scheduling resourse allocation 
+    even the interprocess communication like signal and pipe and shared memory
+
+What is Pipes ?
+
+    pipes are simple synchronized way of passing information between two processes , i view it like
+    simple file that store amount of data an he use FIFO schema to retrieve data so the data written
+    ane read from another pipe allow data to flow unidirectionally between two process 
+    it used for chain the command and enable the process to work to gether in a producer and consumer
+    model and pipes work by creating a buffer in memory that act s as a conduit for transfering data
+    between process and this buffer is temporary and in additional two processes unrelated they
+    communicate via a file like interface if they related they used fork()
+
+What is the diff between pipe and socket ?
+
 
 what is a signalemptyset ?
 
     type of signal set to an empty state ,ensuring that no signal are included in the set
     int sigemptyset(sigset_t *set);
     it clean all signal from set and making it set to empty
+
 what is sigaddset ?
+
     is a function in POSIX standard used to add a signal to signal set(collection of signals)
     and it used to speciafy wich signal a process want to block 
-what is a signal ?
+
 what is the diff between sigaction and signal ?
+
 what is thread ?
+
 signal and traps ?
 
 some inforamation about (Process Mangement)
 
-# Minitalk
