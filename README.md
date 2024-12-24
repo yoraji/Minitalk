@@ -1,4 +1,4 @@
----------------------------------- minitalk -------------------------------------------------
+--------------------------- Minitalk and foundation of Process-management  ---------------------------
 
 What is Inter-Process-Communication(ipc) ?
 
@@ -100,6 +100,22 @@ What is Kill() ?
         . if the signal is 0 mean that no sig is sent, but the error cheack is performed .
             it can be use to cheak whether the calling process has the permission to signal
             a specific process.
+
+What is sigaction ?
+
+    int sigaction(int signum, const struct sigaction *Nullable restrict act, struct sigaction *
+        _Nullable restrict oldact);
+    a sigaction is syatem call is used to change the action taken by a process on receipt of a
+    specific signal we can use any signum exacpt the SIGKILL and SIGSTOP
+    in additional th sigactio can be define as this structer below :
+
+        struct sigaction {
+            void (*sa_handler)(int);
+            void (*sa_sigaction)(int, siginfo_t *, void);
+            sigset_t sa mask;
+            int sa_flags;
+            void (*sa_restorer)(void);
+        };
 
 what is sigaddset ?
 
