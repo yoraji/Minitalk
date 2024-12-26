@@ -88,6 +88,7 @@ what is a signalemptyset ?
     of set , 0 if the signal signum not a member of set and -1 in the case of the error
     so it creat a signal that cheack it work an clean and in a empty state for preventing udefined
     behavor or a garbege value 
+
 What is Kill() ?
 
     used to send any signal to any process group or process.
