@@ -1,15 +1,4 @@
-#include <stdlib.h>
-#include <signal.h>
-#include <unistd.h>
-#include "libft/libft.h"
-#include <stdio.h>
-#include "printf/ft_printf.c"
-#include "printf/ft_putchar.c"
-#include "printf/ft_putstr.c"
-#include "printf/ft_point.c"
-#include "printf/ft_hexdecimal.c"
-#include "printf/ft_unsigned.c"
-#include "printf/ft_putnbr.c"
+#include "minitalk.h"
 
 void send_signal(int pid, unsigned char c)
 {

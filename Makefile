@@ -1,6 +1,7 @@
-CC = gcc
+CC = cc
 CFLAGS = -Wall -Wextra -Werror
-OBJ = $(CLIENT_SRCS:.c=.o) $(SERVER_SRCS:.c=.o)
+
+OBJ = $(CLIENT_SRCS:.c=.o) $(SERVER_SRCS:.c=.o) $(LIBFT:.c=.o) $(PRINTF:.c=.o)
 
 CLIENT_SRCS = client.c
 SERVER_SRCS = server.c
@@ -32,11 +33,11 @@ $(PRINTF):
 
 clean:
 	rm -f $(CLIENT_NAME) $(SERVER_NAME)
-	make -C $(LIBFT_PATH) clean
-	make -C $(PRINTF_PATH) clean
 
 fclean: clean
 	rm -f $(CLIENT_NAME) $(SERVER_NAME) fclean
+	make -C $(LIBFT_PATH) clean
+	make -C $(PRINTF_PATH) clean
 
 re: fclean all
 

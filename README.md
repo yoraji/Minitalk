@@ -111,14 +111,20 @@ What is sigaction ?
     in additional th sigactio can be define as this structer below :
 
         struct sigaction {
-            void (*sa_handler)(int); // TRADITIONAL HANDLER FOR SIGNALS
-            void (*sa_sigaction)(int, siginfo_t *, void); // HANDLER WITH ADDITIONAL INFO (sa_info)
-            sigset_t sa mask; // SET THE SIGNAL TO BE BLOCK DURING THE HANDLER
-            int sa_flags; // FLAGS TO MODIFY FOR HANDLING THE BEHAVOR
-            void (*sa_restorer)(void); // USED FOR THE OLD IMPLEMENTATIONS, TYPCALLY UNUSED
+            void (*sa_handler)(int);
+            void (*sa_sigaction)(int, siginfo_t *, void);
+            sigset_t sa mask;
+            int sa_flags;
+            void (*sa_restorer)(void);
         };
     so it allow you to specify detailed behavoir for a signal compared to the older signal() 
-    and give you more context about the signal 
+    and give you more context about the signal.
+    > sa_handler: Specifies the signal handler function .
+    > sa_sigaction: An alternative handler that can access additional information about the signal 
+        (used when SA_SIGINFO flag is set).
+    > sa_flags: Modifies the behavior of the signal, e.g., SA_RESTART to restart interrupted system 
+        calls.
+    > sa_mask: Defines signals to block while the current handler is running
 
 What is sigusr1 && sigusr2 ?
     they are signals-define signal in unix operating system, defined as part pf the posix standard.

@@ -1,18 +1,4 @@
-#include <signal.h>
-#include <stdio.h>
-#include <stddef.h>
-#include <unistd.h>
-#include "printf/ft_printf.c"
-#include "printf/ft_putchar.c"
-#include "printf/ft_putstr.c"
-#include "printf/ft_point.c"
-#include "printf/ft_hexdecimal.c"
-#include "printf/ft_unsigned.c"
-#include "printf/ft_putnbr.c"
-
-#define YELLOW "\033[33m"
-#define RED "\033[31m"
-#define END "\033[0m"
+#include "minitalk.h"
 
 void display_banner(int pid)
 {
@@ -46,6 +32,7 @@ void handle_signal(int signal)
         character = 0;
     }
 }
+
 /*
  *	struct sigaction 
  *	{
@@ -60,6 +47,7 @@ void handle_signal(int signal)
 			  // link SIGUSR2 to the act structure
 			  // link SIGUSR2 to the act structure
  * */
+
 int main(void)
 {
     struct sigaction act;
