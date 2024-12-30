@@ -46,7 +46,20 @@ void handle_signal(int signal)
         character = 0;
     }
 }
-
+/*
+ *	struct sigaction 
+ *	{
+               void     (*sa_handler)(int);
+               void     (*sa_sigaction)(int, siginfo_t *, void *);
+               sigset_t   sa_mask;
+               int        sa_flags;
+               void     (*sa_restorer)(void);
+        };
+	act.sa_flags = 0; // No specific flags
+			  // set the hander for the signal
+			  // link SIGUSR2 to the act structure
+			  // link SIGUSR2 to the act structure
+ * */
 int main(void)
 {
     struct sigaction act;
@@ -57,11 +70,9 @@ int main(void)
     display_banner(pid);
 
     act.sa_flags = 0;
-    act.sa_handler = handle_signal;
-
-    sigaction(SIGUSR1, &act, NULL);
-    sigaction(SIGUSR2, &act, NULL);
-
+    act.sa_handler = handle_signal; // set a custom handler 
+    sigaction(SIGUSR1, &act, NULL); // Handler SIGUSR1
+    sigaction(SIGUSR2, &act, NULL); // Handler SIGUSR2
     while (1)
         pause();
 
