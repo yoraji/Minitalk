@@ -120,6 +120,12 @@ What is sigaction ?
     so it allow you to specify detailed behavoir for a signal compared to the older signal() 
     and give you more context about the signal 
 
+What is sigusr1 && sigusr2 ?
+    they are signals-define signal in unix operating system, defined as part pf the posix standard.
+    these signal probide a mechanisum for usr application to communicate or handle custom event
+    SIGUSR1 = signal 10
+    SIGUSR2 = signal 12 
+
 what is sigaddset ?
 
     is a function in POSIX standard used to add a signal to signal set(collection of signals)

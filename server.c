@@ -1,64 +1,70 @@
-#include <stdlib.h>
 #include <signal.h>
+#include <stdio.h>
+#include <stddef.h>
 #include <unistd.h>
-#include "libft/libft.h"
-#include "printf/ft_printf.h"
+#include "printf/ft_printf.c"
+#include "printf/ft_putchar.c"
+#include "printf/ft_putstr.c"
+#include "printf/ft_point.c"
+#include "printf/ft_hexdecimal.c"
+#include "printf/ft_unsigned.c"
+#include "printf/ft_putnbr.c"
 
-void	display_banner(int pid)
+#define YELLOW "\033[33m"
+#define RED "\033[31m"
+#define END "\033[0m"
+
+void display_banner(int pid)
 {
-	ft_printf("\n\t%s███╗   ███╗██╗███╗   ██╗██╗████████╗ █████╗ ██╗     ██╗██╗\
-			%s\n", YELLOW, END);
-	ft_printf("\t%s██╔████╔██║██║██╔██╗ ██║██║   ██║   ███████║██║     █████╔╝\
-			%s \n", YELLOW, END);
-	ft_printf("\t%s██║╚██╔╝██║██║██║╚██╗██║██║   ██║   ██╔══██║██║     ██╔═██╗\
-			%s \n", YELLOW, END);
-	ft_printf("\t%s██║ ╚═╝ ██║██║██║ ╚████║██║   ██║   ██║  ██║███████╗██║  ██╗\
-			%s\n", YELLOW, END);
-	ft_printf("\t%s╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝   ╚═╝   ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝\
-			%s\n", YELLOW, END);
-	ft_printf("%s\n\t\tPID: %d%s\t\t\t%sBy: yoraji%s\n", RED, pid, END,
-		YELLOW, END);
-	ft_printf("\t⊱ ────────────────────── {.⋅ ✯ ⋅.} ─────────────────────── ⊰\
-			\n\n");
+    ft_printf("\n\t███╗   ███╗██╗███╗   ██╗██╗████████╗ █████╗ ██╗     ██╗██╗\n");
+    ft_printf("\t██╔████╔██║██║██╔██╗ ██║██║   ██║   ███████║██║     █████╔╝\n");
+    ft_printf("\t██║╚██╔╝██║██║██║╚██╗██║██║   ██║   ██╔══██║██║     ██╔═██╗\n");
+    ft_printf("\t██║ ╚═╝ ██║██║██║ ╚████║██║   ██║   ██║  ██║███████╗██║  ██╗\n");
+    ft_printf("\t╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝   ╚═╝   ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝\n");
+    ft_printf("\n\t\tPID: %d\t\t\tBy: yoraji\n", pid);
+    ft_printf("\t⊱ ────────────────────── {.⋅ ✯ ⋅.} ─────────────────────── ⊰\n\n");
 }
 
-void	handle_signal(int pid)
+void handle_signal(int signal)
 {
-	static int count = 0;
-	static unsigned char character = 0;
+    static int count = 0;
+    static unsigned char character = 0;
 
-	if (pid == SIGUSR1)
-		character = (character << 1) | 1;
-	else if (pid == SIGUSR2)
-		character = (character << 1);
-	count++;
-	if (count == 8)
-	{
-		if(character == '\0'){
-			write(1,"\n",1);
-		}else{
-			write(1,&character,1);
-		}
-		count = 0;
-		character = 0;
-	}
-	write(1,"\n",1);
+    if (signal == SIGUSR1)
+        character = (character << 1) | 1;
+    else if (signal == SIGUSR2)
+        character = (character << 1);
+
+    count++;
+    if (count == 8)
+    {
+        if (character == '\0')
+            write(1, "\n", 1);
+        else
+            write(1, &character, 1);
+        count = 0;
+        character = 0;
+    }
 }
 
 int main(void)
 {
-	struct sigaction	act;
-	char				*tag;
+    struct sigaction act;
+    int pid;
 
-	act.sa_falgs = SA_SIGINFO;
-	act.sa_sigaction = sig_handler;
-	printf("Server PID: %d\n",getpid());
-	display_banner(pid);
-	while(1)
-	{
-		signal(SIGUSR1,handle_signal);
-		signal(SIGUSR2,handle_signal);
-		pause();
-	}
-	return 0;
+    pid = getpid();
+    ft_printf("Server PID: %d\n", pid); // Changed `printf` to `ft_printf` for consistency
+    display_banner(pid);
+
+    act.sa_flags = 0;
+    act.sa_handler = handle_signal;
+
+    sigaction(SIGUSR1, &act, NULL);
+    sigaction(SIGUSR2, &act, NULL);
+
+    while (1)
+        pause();
+
+    return 0;
+}
 
