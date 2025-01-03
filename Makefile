@@ -1,45 +1,45 @@
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
 
-OBJ = $(CLIENT_SRCS:.c=.o) $(SERVER_SRCS:.c=.o) $(LIBFT:.c=.o) $(PRINTF:.c=.o)
-
 CLIENT_SRCS = client.c
 SERVER_SRCS = server.c
 
 CLIENT_NAME = client
 SERVER_NAME = server
 
-LIBFT = libft
-PRINTF = printf
+LIBFT_DIR = ./libft/
+PRINTF_DIR = ./printf/
 
-LIBFT_PATH = ./libft/ 
-PRINTF_PATH = ./printf/
+LIBFT = $(LIBFT_DIR)libft.a
+PRINTF = $(PRINTF_DIR)libftprintf.a
 
-all: $(CLIENT_NAME) $(SERVER_NAME)
+all: $(LIBFT) $(PRINTF) $(CLIENT_NAME) $(SERVER_NAME)
 
-bonus: $(CLIENT_NAME) $(SERVER_NAME)
+bonus: all
 
 $(CLIENT_NAME): $(CLIENT_SRCS) $(LIBFT) $(PRINTF)
-	$(CC) $(CFLAGS) $(CLIENT_SRCS)  -o $(CLIENT_NAME) -L $(PRINTF) -lft -L $(LIBFT) -lft
+	$(CC) $(CFLAGS) $(CLIENT_SRCS) -o $(CLIENT_NAME) -L $(PRINTF_DIR) -lft -L $(LIBFT_DIR) -lft
 
 $(SERVER_NAME): $(SERVER_SRCS) $(LIBFT) $(PRINTF)
-	$(CC) $(CFLAGS) $(SERVER_SRCS)  -o $(SERVER_NAME) -L $(PRINTF) -lft -L $(LIBFT) -lft
+	$(CC) $(CFLAGS) $(SERVER_SRCS) -o $(SERVER_NAME) -L $(PRINTF_DIR) -lft -L $(LIBFT_DIR) -lft
 
 $(LIBFT):
-	make -C $(LIBFT_PATH)
+	make -C $(LIBFT_DIR)
 
 $(PRINTF):
-	make -C $(PRINTF_PATH)
+	make -C $(PRINTF_DIR)
 
 clean:
-	rm -f $(CLIENT_NAME) $(SERVER_NAME)
+	make -C $(LIBFT_DIR) clean
+	make -C $(PRINTF_DIR) clean
+	rm -f *.o
 
 fclean: clean
-	rm -f $(CLIENT_NAME) $(SERVER_NAME) fclean
-	make -C $(LIBFT_PATH) clean
-	make -C $(PRINTF_PATH) clean
+	make -C $(LIBFT_DIR) fclean
+	make -C $(PRINTF_DIR) fclean
+	rm -f $(CLIENT_NAME) $(SERVER_NAME)
 
 re: fclean all
 
-.PHONY: all bonus libft printf clean fclean re
+.PHONY: all bonus clean fclean re
 

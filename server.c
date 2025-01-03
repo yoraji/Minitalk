@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   server.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yoraji <yoraji@student.1337.ma>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/03 05:46:20 by yoraji            #+#    #+#             */
+/*   Updated: 2025/01/03 10:12:37 by yoraji           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minitalk.h"
 
 void display_banner(int pid)
@@ -9,44 +21,38 @@ void display_banner(int pid)
     ft_printf("\t╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝   ╚═╝   ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝\n");
     ft_printf("\n\t\tPID: %d\t\t\tBy: yoraji\n", pid);
     ft_printf("\t⊱ ────────────────────── {.⋅ ✯ ⋅.} ─────────────────────── ⊰\n\n");
+
 }
 
-void handle_signal(int signal)
+void handler(int sig, siginfo_t *info, void __attribute__((unused)) *u)
 {
-    static int count = 0;
-    static unsigned char character = 0;
+    static int              bit_count = 0;
+    static unsigned char    character = 0;
 
-    if (signal == SIGUSR1)
+    if (sig == SIGUSR1)
+    {
         character = (character << 1) | 1;
-    else if (signal == SIGUSR2)
-        character = (character << 1);
+    }
+    else if (sig == SIGUSR2)
+    {
+	character = (character << 1);
+    }
 
-    count++;
-    if (count == 8)
+    bit_count++;
+    if (bit_count == 8)
     {
         if (character == '\0')
             write(1, "\n", 1);
-        else
+        else        
             write(1, &character, 1);
-        count = 0;
+
+        bit_count = 0; 
         character = 0;
     }
-}
 
-/*
- *	struct sigaction 
- *	{
-               void     (*sa_handler)(int);
-               void     (*sa_sigaction)(int, siginfo_t *, void *);
-               sigset_t   sa_mask;
-               int        sa_flags;
-               void     (*sa_restorer)(void);
-        };
-	act.sa_flags = 0; // No specific flags
-			  // set the hander for the signal
-			  // link SIGUSR2 to the act structure
-			  // link SIGUSR2 to the act structure
- * */
+    if (info && info->si_pid > 0)
+        kill(info->si_pid, SIGUSR1);
+}
 
 int main(void)
 {
@@ -54,16 +60,21 @@ int main(void)
     int pid;
 
     pid = getpid();
-    ft_printf("Server PID: %d\n", pid); // Changed `printf` to `ft_printf` for consistency
     display_banner(pid);
 
-    act.sa_flags = 0;
-    act.sa_handler = handle_signal; // set a custom handler 
-    sigaction(SIGUSR1, &act, NULL); // Handler SIGUSR1
-    sigaction(SIGUSR2, &act, NULL); // Handler SIGUSR2
-    while (1)
+    act.sa_flags = SA_SIGINFO;
+    act.sa_sigaction = handler;
+    sigemptyset(&act.sa_mask); 
+
+    if (sigaction(SIGUSR1, &act, NULL) == -1 || sigaction(SIGUSR2, &act, NULL) == -1)
+    {
+        ft_printf("Error: Failed to set up signal handlers.\n");
+        return (EXIT_FAILURE);
+    }
+
+    while (1) 
         pause();
 
-    return 0;
+    return (0);
 }
 
