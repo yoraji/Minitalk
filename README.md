@@ -1,5 +1,5 @@
 ##### minitalk #### 
----- README.md ---- "IT IS NOT COMPELITED YET"
+---" THIS PROJECT IS NOT COMPELITED YET"----
 
     signal : simply it is a interruption that notifies a process about an event ,often prompting it to
 pause and handle the occurence before resuming
@@ -74,5 +74,5 @@ what is signal mask and blocking with sigpromask ?
 ## HERE IS WANDERFUL RESOURCES FOR LEARNINIG ##
 https://beej.us/guide/bgipc/
 https://www.gnu.org/software/libc/manual/html_node/Signal-Handling.html
-https://www.geeksforgeeks.org/signals-and-systems/
+https://www.geeksforgeeks.org/signals-c-language/
 https://www.tutorialspoint.com/unix/unix-signals-traps.htm
