@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   server.c                                           :+:      :+:    :+:   */
+/*   server_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yoraji <yoraji@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/03 05:46:20 by yoraji            #+#    #+#             */
-/*   Updated: 2025/01/04 15:58:32 by yoraji           ###   ########.fr       */
+/*   Created: 2025/01/03 17:29:34 by yoraji            #+#    #+#             */
+/*   Updated: 2025/01/03 17:30:05 by yoraji           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minitalk.h"
+#include "minitalk_bonus.h"
 
 void	display_banner(int pid)
 {
@@ -20,7 +20,7 @@ void	display_banner(int pid)
 	ft_printf("\t██║ ╚═╝ ██║██║██║ ╚████║██║   ██║   ██║  ██║███████╗██║  ██╗\n");
 	ft_printf("\t╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝   ╚═╝   ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝\n");
 	ft_printf("\n\t\tPID: %d\t\t\tBy: yoraji\n", pid);
-	ft_printf("\t⊱ ──────────────────── {.⋅ ✯ ⋅.} ───────────────────── ⊰\n\n");
+	ft_printf("\t⊱ ─────────────────── {.⋅ ✯ ⋅.} ──────────────────── ⊰\n\n");
 }
 
 void	handler(int sig, siginfo_t *info, void __attribute__((unused)) *u)
@@ -36,9 +36,14 @@ void	handler(int sig, siginfo_t *info, void __attribute__((unused)) *u)
 	if (bit_count == 8)
 	{
 		if (character == '\0')
+		{
 			write(1, "\n", 1);
+			kill(info->si_pid, SIGUSR2);
+		}
 		else
+		{
 			write(1, &character, 1);
+		}
 		bit_count = 0;
 		character = 0;
 	}
@@ -56,8 +61,8 @@ int	main(void)
 	act.sa_flags = SA_SIGINFO;
 	act.sa_sigaction = handler;
 	sigemptyset(&act.sa_mask);
-	if (sigaction(SIGUSR1, &act, NULL) == -1
-		|| sigaction(SIGUSR2, &act, NULL) == -1)
+	if (sigaction(SIGUSR1, &act, NULL) == -1 || sigaction(SIGUSR2, &act,
+			NULL) == -1)
 	{
 		ft_printf("Error: Failed to set up signal handlers.\n");
 		return (EXIT_FAILURE);

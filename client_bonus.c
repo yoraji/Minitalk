@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   client.c                                           :+:      :+:    :+:   */
+/*   client_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yoraji <yoraji@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/04 15:55:24 by yoraji            #+#    #+#             */
-/*   Updated: 2025/01/04 15:55:27 by yoraji           ###   ########.fr       */
+/*   Created: 2025/01/03 17:29:25 by yoraji            #+#    #+#             */
+/*   Updated: 2025/01/04 13:49:34 by yoraji           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minitalk.h"
+#include "minitalk_bonus.h"
 
 volatile sig_atomic_t	g_ack = 0;
 
@@ -49,10 +49,14 @@ void	ft_send_signal(int pid, unsigned char c)
 	}
 }
 
-void	ack_handler(int signum)
+void	ack_handler(int sig)
 {
-	(void)signum;
-	g_ack = 1;
+	if (sig == SIGUSR1)
+		g_ack = 1;
+	else if (sig == SIGUSR2)
+	{
+		write(1, "Message sent\n", 13);
+	}
 }
 
 int	main(int argc, char *argv[])
@@ -73,6 +77,7 @@ int	main(int argc, char *argv[])
 		return (EXIT_FAILURE);
 	}
 	signal(SIGUSR1, ack_handler);
+	signal(SIGUSR2, ack_handler);
 	while (argv[2][i])
 	{
 		ft_send_signal(pid, argv[2][i]);
