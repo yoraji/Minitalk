@@ -1,71 +1,66 @@
 # Minitalk
 
-**Note:** This project is **not completed yet**.
-
 ## Overview
 
-Minitalk is a project designed to explore inter-process communication using UNIX signals. It involves implementing a client-server communication protocol where messages are transmitted bit by bit using `SIGUSR1` and `SIGUSR2`.
+**Minitalk** is a project that implements client-server communication using UNIX signals. The goal is to send and receive messages bit by bit through signals, ensuring synchronization and proper handling of asynchronous events.
+
+This project is a great way to learn about inter-process communication (IPC), signal handling, and synchronization techniques.
 
 ---
 
-## What Are Signals?
+## Key Concepts
 
-A **signal** is an interruption notifying a process about an event, often prompting it to pause and handle the occurrence before resuming. Signals are essential for:
+### What Are Signals?
 
-- Informing a process about events like suspension, system calls, or faults.
-- Preventing race conditions or deadlocks by coordinating actions.
+A **signal** is a software interrupt sent to a process to notify it of an event. Examples include process termination, memory access violations, or user-defined actions. Signals play a critical role in managing inter-process communication.
 
----
+### Why Signals for IPC?
 
-## Key System Calls for Signal Handling
+Signals are lightweight and efficient for simple communication like notifying a process about an event. In Minitalk, signals are used to:
 
-- **`signal()`**: Sets a simple signal handler.
-- **`sigaction()`**: Advanced, thread-safe method to handle signals.
-- **`kill()`**: Sends a signal to a specific process.
-- **`raise()`**: Sends a signal to the current process.
-- **`pause()`**: Waits for a signal.
-- **`sigpending()`**: Checks pending signals (*not allowed in this project*).
-
-### What Is a Signal Handler?
-
-A signal handler is a function defined in your program to handle a specific signal. When a signal is delivered, the handler executes to respond to the event. Signal handlers allow custom actions to be taken when a signal is received.
+- **Transmit data:** Use `SIGUSR1` and `SIGUSR2` to represent binary data (`0` and `1`).
+- **Synchronize processes:** Ensure the server correctly receives and processes each bit.
 
 ---
 
-## Why Use `SIGUSR1` and `SIGUSR2`?
+## Key Features
 
-- These signals are user-defined and do not conflict with standard system signals.
-- In Minitalk, they are used to transmit binary data (bits of the message) from the client to the server.
-- The client sends these signals using the `kill()` function, and the server interprets them as `0` or `1`.
+- **Client-Server Communication:**  
+  The client sends messages to the server using `SIGUSR1` and `SIGUSR2`. The server decodes these signals into readable text.
+  
+- **Binary Transmission:**  
+  Messages are sent bit by bit, making this a good introduction to low-level communication protocols.
 
----
+- **Signal Handlers:**  
+  Custom handlers are implemented to manage incoming signals and handle them efficiently.
 
-## Why Use `volatile sig_atomic_t`?
-
-The `volatile sig_atomic_t` type is essential for:
-
-1. **Preventing conflicts**: Ensures no corrupted data is written due to simultaneous signal handling.
-2. **Atomic operations**: Guarantees that the variable is read or written in a single operation.
-3. **Preventing optimizations**: `volatile` ensures the compiler always fetches the latest value.
+- **Synchronization:**  
+  The project avoids race conditions and ensures the server processes signals in order.
 
 ---
 
-## Standard Signals to Know
+## Why `SIGUSR1` and `SIGUSR2`?
 
-- **`SIGINT` (2)**: Sent when the user presses `Ctrl+C`.
-- **`SIGTERM` (15)**: Gracefully terminates a process.
-- **`SIGHUP` (1)**: Sent when a terminal is closed.
-- **`SIGKILL` (9)**: Immediately terminates a process (cannot be ignored or caught).
-- **`SIGSEGV` (11)**: Indicates an invalid memory access (*segfault*).
+These signals are reserved for user-defined purposes and don't interfere with system-defined signals like `SIGINT` or `SIGKILL`. In Minitalk:
+
+- **`SIGUSR1`** represents binary `0`.  
+- **`SIGUSR2`** represents binary `1`.  
+
+This binary communication protocol ensures precise transmission and avoids ambiguity.
 
 ---
 
-## Signal Mask and Blocking (`sigprocmask`)
+## How Signals Are Handled
 
-A **signal mask** allows control over which signals are temporarily blocked. Blocking signals ensures that signal handlers don't interfere with sensitive operations.  
+### Signal Handlers
+A **signal handler** is a function executed in response to a signal. For example:
 
-**Function Prototype:**
 ```c
-#include <signal.h>
-int sigprocmask(int how, const sigset_t *set, sigset_t *oldset);
+void handle_signal(int signum) {
+    if (signum == SIGUSR1) {
+        // Handle binary '0'
+    } else if (signum == SIGUSR2) {
+        // Handle binary '1'
+    }
+}
 
